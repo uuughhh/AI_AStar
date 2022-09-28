@@ -380,17 +380,17 @@ class Map_Obj():
             An array of the positions of the neighbors (walkable position only)
         """
         neighbors = list()
-        if (self.isWalkable([pos[0]+1,pos[1]])):
-            # left
-            neighbors.append([pos[0]+1,pos[1]])
+        if (self.isWalkable([pos[0]-1,pos[1]])):
+            # right
+            neighbors.append([pos[0]-1,pos[1]])
 
         if (self.isWalkable([pos[0],pos[1]+1])):
             # up
             neighbors.append([pos[0],pos[1]+1])
 
-        if (self.isWalkable([pos[0]-1,pos[1]])):
-            # right
-            neighbors.append([pos[0]-1,pos[1]])
+        if (self.isWalkable([pos[0]+1,pos[1]])):
+            # left
+            neighbors.append([pos[0]+1,pos[1]])
             
         if (self.isWalkable([pos[0],pos[1]-1])):
             # down

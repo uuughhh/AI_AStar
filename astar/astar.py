@@ -50,7 +50,6 @@ def A_star (map:Map_Obj, start: list[int,int], goal: list[int,int]):
     while not exploredPos.empty():
 
         currentPos = exploredPos.get()[1]      # pop the least-cost position from queue
-        
         if currentPos == goal:
             # reach the goal
             break
@@ -97,7 +96,7 @@ def visualise_path (positionDict: dict, start: list[int,int], goal: list[int,int
             map.set_walked(current)  # set path as yellow
 
 
-# task 1    
+# task solutions (1-4)    task 5 is an individual function
 def task (taskNum:int):
     """
     Solution to any task with a task number 1-4.
@@ -121,5 +120,46 @@ def task (taskNum:int):
 for i in range(1,5):
     task(i)
 
+def task5 ():
+    # initialize task environment
+    map = Map_Obj(task=5)
+    start = map.get_start_pos()
+    goal = map.get_goal_pos()
+
+    exploredPos = PriorityQueue()       # priority queue for storing estimated of current frontier positions
+    actualCost = {}                     # actual costs of the starting position to each reached position
+    exploredPath = {}                   # dictionary for path
+
+    exploredPos.put((0,start))
+    actualCost[tuple(start)] = 0
+    exploredPath[tuple(start)] = None
+
+    while not exploredPos.empty():
+
+        currentPos = exploredPos.get()[1]      # pop the least-cost position from queue
+        goal = map.tick()                      # check and change goal in every iteration
+        if currentPos == goal:
+            # reach the goal
+            break
+            
+        neighbors = map.get_neighbors(currentPos)                                        # a list of the neighboring positions
+        for next in neighbors:
+            newActualCost = actualCost[tuple(currentPos)] +  map.get_cell_value(next)    # calculate acutal cost from start to next
+
+            if tuple(next) not in actualCost or newActualCost < actualCost[tuple(next)]:
+                actualCost[tuple(next)] = newActualCost                        # update actual cost dictionary
+                estimatedCost = newActualCost + heuristic(goal,next)           # get new estimated cost from next
+                exploredPos.put((estimatedCost,next))                            
+                exploredPath[tuple(next)] = currentPos
+                
+    # generate path and visualise it, print the cost
+    if exploredPath == None:
+        return print("No path found")
+    visualise_path(exploredPath,start,goal,map)
+    cost = actualCost[tuple(goal)]
+    print(f"Total cost of the path in task 5 is: {cost}" )
+    map.show_map()
+
+task5()
 
 
